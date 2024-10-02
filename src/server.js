@@ -10,7 +10,6 @@
 } */
 // - Запуск серверу на порті, вказаному через змінну оточення PORT або 3000, якщо такої змінної не зазначено
 // - При вдалому запуску сервера виводити в консоль рядок “Server is running on port {PORT}”, де {PORT} - це номер вашого порту.
-
 // Не забудьте вказати змінну оточення в файлі .env.example
 
 import express from 'express';
@@ -20,7 +19,7 @@ import cors from 'cors';
 import { env } from './utils/env.js';
 
 // Читаємо змінну оточення PORT
-const PORT = Number(env('PORT', '3000'));
+const PORT = Number(env('PORT', '8080'));
 
 export function setupServer() {
 
@@ -36,18 +35,16 @@ export function setupServer() {
       },
     }),
   );
-/*
-  // Middleware для логування часу запиту
-  app.use((req, res, next) => {
-    console.log(`Time: ${new Date().toLocaleString()}`);
-    next();
-  });
- */
+
   // Маршрут для обробки GET-запитів на '/'
   app.get('/', (req, res) => {
     res.json({
       message: 'Hello, World!',
     });
+  });
+
+  app.get('/books', (req, res) => {
+    res.send('Books');
   });
 
   app.use('*', (req, res, next) => {
