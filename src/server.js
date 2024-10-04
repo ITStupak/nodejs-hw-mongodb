@@ -1,33 +1,17 @@
-// Тут буде знаходитись логіка роботи вашого express-серверу.
-
-// Створіть функцію setupServer, в якій буде створюватись express сервер.
-// Ця функція має в себе включати:
-// - Створення серверу за допомогою виклику express()
-// - Налаштування cors та логгера pino.
-// - Обробку неіснуючих роутів (повертає статус 404 і відповідне повідомлення)
-/* {
-  message: 'Not found',
-} */
-// - Запуск серверу на порті, вказаному через змінну оточення PORT або 3000, якщо такої змінної не зазначено
-// - При вдалому запуску сервера виводити в консоль рядок “Server is running on port {PORT}”, де {PORT} - це номер вашого порту.
-// Не забудьте вказати змінну оточення в файлі .env.example
-
 import express from 'express';
 import pino from 'pino-http';
 import cors from 'cors';
-
 import { env } from './utils/env.js';
+import { getAllContacts, getContactById } from './services/contacts.js';
 
-// Читаємо змінну оточення PORT
 const PORT = Number(env('PORT', '8080'));
 
 export function setupServer() {
 
   const app = express();
-  app.use(express.json()); // Вбудований у express middleware для обробки (парсингу) JSON-даних у запитах, наприклад, у запитах POST або PATCH
+  app.use(express.json());
   app.use(cors());
 
-  //Pino надає нам middleware і можливість додатково налаштовувати логгер через об’єкт властивостей.
   app.use(
     pino({
       transport: {
@@ -36,17 +20,37 @@ export function setupServer() {
     }),
   );
 
-  // Маршрут для обробки GET-запитів на '/'
-  app.get('/', (req, res) => {
-    res.json({
-      message: 'Hello, World!',
+  app.get('/contacts', async (req, res) => {
+    const contacts = await getAllContacts();
+
+    res.status(200).json({
+      status: 200,
+      message: "Successfully found contacts!",
+      data: contacts,
     });
   });
 
-  app.get('/books', (req, res) => {
-    res.send('Books');
+  app.get('/contacts/:contactId', async (req, res, next) => {
+    const { contactId } = req.params;
+    const contact = await getContactById(contactId);
+
+    // Відповідь, якщо контакт не знайдено
+	if (!contact) {
+	  res.status(404).json({
+		  message: 'Contact not found'
+	  });
+	  return;
+	}
+
+	// Відповідь, якщо контакт знайдено
+    res.status(200).json({
+      status: 200,
+	    message: `Successfully found contact with id ${contactId}!`,
+      data: contact,
+    });
   });
 
+  // Middleware для обробких status 404
   app.use('*', (req, res, next) => {
     res.status(404).json({
       message: 'Not found',
