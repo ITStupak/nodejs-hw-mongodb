@@ -22,6 +22,6 @@ router.get('/contacts', ctrlWrapper(getContactsController));
 router.get('/contacts/:contactId', isValidId, ctrlWrapper(getContactByIdController));
 router.post('/contacts', jsonParser, validateBody(createContactSchema), ctrlWrapper(createContactController));
 router.delete('/contacts/:contactId', isValidId, ctrlWrapper(deleteContactController));
-router.patch('/contacts/:contactId', jsonParser, validateBody(updateContactSchema), isValidId, ctrlWrapper(patchContactController));
+router.patch('/contacts/:contactId', jsonParser, isValidId, validateBody(updateContactSchema), ctrlWrapper(patchContactController));
 
 export default router;

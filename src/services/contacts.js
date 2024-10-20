@@ -14,14 +14,11 @@ export const getAllContacts = async ({
 
   const contactsQuery = ContactsCollection.find();
 
-  if (filter.name) {
-    contactsQuery.where('name').equals(filter.name);
-  }
-  if (filter.phoneNumber) {
-    contactsQuery.where('phoneNumber').lte(filter.phoneNumber);
-  }
   if (filter.contactType) {
-    contactsQuery.where('contactType').gte(filter.contactType);
+    contactsQuery.where('contactType').equals(filter.contactType);
+  }
+  if (filter.isFavourite) {
+    contactsQuery.where('isFavourite').equals(filter.isFavourite);
   }
 
   const [contactsCount, contacts] = await Promise.all([
@@ -32,12 +29,6 @@ export const getAllContacts = async ({
       .sort({ [sortBy]: sortOrder })
       .exec(),
   ]);
-
-  /* const contactsCount = await ContactsCollection.find()
-    .merge(contactsQuery)
-    .countDocuments();
-
-  const contacts = await contactsQuery.skip(skip).limit(limit).sort({ [sortBy]: sortOrder }).exec(); */
 
   const paginationData = calculatePaginationData(contactsCount, perPage, page);
 

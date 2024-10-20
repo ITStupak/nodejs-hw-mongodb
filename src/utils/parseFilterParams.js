@@ -1,46 +1,25 @@
-
-const parseName = (name) => {
-    const isString = typeof name === 'string';
-    if (!isString) return;
-
-    const parsedName = parseInt(name);
-    if (Number.isNaN(parsedName)) {
-        return;
-    }
-
-    return parsedName;
-};
-
-const parsePhoneNumber = (phoneNumber) => {
-    const isString = typeof phoneNumber === 'string';
-    if (!isString) return;
-
-    const parsedPhoneNumber = parseInt(phoneNumber);
-    if (Number.isNaN(parsedPhoneNumber)) {
-        return;
-    }
-
-    return parsedPhoneNumber;
-};
-
-const parseContactType = (contactType) => {
-  const isString = typeof contactType === 'string';
+const parseContactType = (type) => {
+  const isString = typeof type === 'string';
   if (!isString) return;
-  const isContactType = (contactType) => ['work', 'home', 'personal'].includes(contactType);
+  const isContactType = (type) => ['work', 'home', 'personal'].includes(type);
+  if (isContactType(type)) return type;
+};
 
-  if (isContactType(contactType)) return contactType;
+const parseIsFavourite = (value) => {
+  if (typeof value === 'boolean') return value;
+  const valueToString = String(value).toLowerCase();
+  if (valueToString === 'true') return true;
+  if (valueToString === 'false') return false;
+  return undefined;
 };
 
 export const parseFilterParams = (query) => {
-  const { name, contactType, phoneNumber } = query;
-
-  const parsedName = parseName(name);
-  const parsedPhoneNumber = parsePhoneNumber(phoneNumber);
+  const { contactType, isFavourite } = query;
   const parsedContactType = parseContactType(contactType);
+  const parsedIsFavourite = parseIsFavourite(isFavourite);
 
   return {
-      name: parsedName,
-      phoneNumber: parsedPhoneNumber,
-      contactType: parsedContactType,
+    contactType: parsedContactType,
+    isFavourite: parsedIsFavourite,
   };
 };

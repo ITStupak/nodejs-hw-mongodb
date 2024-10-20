@@ -1,5 +1,6 @@
 import { createContact, getAllContacts, getContactById, deleteContact, updateContact } from '../services/contacts.js';
 import createHttpError from 'http-errors';
+
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
 import { parseFilterParams } from '../utils/parseFilterParams.js';
@@ -41,7 +42,6 @@ export const getContactByIdController = async (req, res) => {
   });
 };
 
-
 export const createContactController = async (req, res) => {
   const newContact = await createContact(req.body);
 
@@ -51,7 +51,6 @@ export const createContactController = async (req, res) => {
     data: newContact,
   });
 };
-
 
 export const deleteContactController = async (req, res) => {
   const { contactId } = req.params;
@@ -63,7 +62,6 @@ export const deleteContactController = async (req, res) => {
 
   res.status(204).send();
 };
-
 
 export const patchContactController = async (req, res) => {
   const { contactId } = req.params;
