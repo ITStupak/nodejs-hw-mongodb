@@ -24,10 +24,10 @@ const jsonParser = express.json();
 
 router.use(authenticate);
 
-router.get('/', checkRoles(ROLES.TEACHER), ctrlWrapper(getContactsController));
-router.get('/:contactId', isValidId, checkRoles(ROLES.TEACHER, ROLES.ADMIN), ctrlWrapper(getContactByIdController));
-router.post('/', jsonParser, validateBody(createContactSchema), checkRoles(ROLES.TEACHER), ctrlWrapper(createContactController));
-router.delete('/:contactId', isValidId, checkRoles(ROLES.TEACHER), ctrlWrapper(deleteContactController));
-router.patch('/:contactId', jsonParser, isValidId, checkRoles(ROLES.TEACHER, ROLES.ADMIN), validateBody(updateContactSchema), ctrlWrapper(patchContactController));
+router.get('/', checkRoles(ROLES.ADMIN), ctrlWrapper(getContactsController));
+router.get('/:contactId', isValidId, checkRoles(ROLES.ADMIN, ROLES.PERSON), ctrlWrapper(getContactByIdController));
+router.post('/', jsonParser, validateBody(createContactSchema), checkRoles(ROLES.ADMIN), ctrlWrapper(createContactController));
+router.delete('/:contactId', isValidId, checkRoles(ROLES.ADMIN), ctrlWrapper(deleteContactController));
+router.patch('/:contactId', jsonParser, isValidId, checkRoles(ROLES.ADMIN, ROLES.PERSON), validateBody(updateContactSchema), ctrlWrapper(patchContactController));
 
 export default router;
