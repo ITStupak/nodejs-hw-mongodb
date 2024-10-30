@@ -3,8 +3,8 @@ import { Router } from 'express';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { validateBody } from '../middlewares/validateBody.js';
 
-import { registerUserSchema, loginUserSchema, sendResetEmailSchema } from '../validation/auth.js';
-import { registerUserController, loginUserController, logoutUserController, refreshUserSessionController, sendResetEmailController } from '../controllers/auth.js';
+import { registerUserSchema, loginUserSchema, sendResetEmailSchema, resetPasswordSchema } from '../validation/auth.js';
+import { registerUserController, loginUserController, logoutUserController, refreshUserSessionController, sendResetEmailController, resetPasswordController } from '../controllers/auth.js';
 
 const router = Router();
 const jsonParser = express.json();
@@ -18,6 +18,9 @@ router.post('/logout', ctrlWrapper(logoutUserController));
 router.post('/refresh', ctrlWrapper(refreshUserSessionController));
 
 router.post('/send-reset-email', jsonParser, validateBody(sendResetEmailSchema), ctrlWrapper(sendResetEmailController),
+);
+
+router.post('/reset-password', jsonParser, validateBody(resetPasswordSchema), ctrlWrapper(resetPasswordController),
 );
 
 export default router;
