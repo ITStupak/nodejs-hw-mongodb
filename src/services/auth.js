@@ -6,8 +6,7 @@ import handlebars from 'handlebars';
 import path from 'node:path';
 import fs from 'node:fs/promises';
 
-import { SMTP, TEMPLATES_DIR } from '../constants/index.js';
-import { env } from '../utils/env.js';
+import { TEMPLATES_DIR } from '../constants/index.js';
 import { sendEmail } from '../utils/sendMail.js';
 
 import { FIFTEEN_MINUTES, THIRTY_DAYS } from '../constants/index.js';
@@ -105,7 +104,7 @@ export const requestResetToken = async (email) => {
       sub: user._id,
       email,
     },
-    env('JWT_SECRET'),
+    process.env.JWT_SECRET,
     {
       expiresIn: '5m',
     },
@@ -123,12 +122,12 @@ export const requestResetToken = async (email) => {
   const template = handlebars.compile(templateSource);
   const html = template({
     name: user.name,
-    link: `${env("APP_DOMAIN")}/reset-password?token=${resetToken}`,
+    link: `${process.env.APP_DOMAIN}/reset-password?token=${resetToken}`,
   });
 
   try {
     await sendEmail({
-    from: env(SMTP.SMTP_FROM),
+    from: process.env.SMTP_FROM,
     to: email,
     subject: 'Reset your password',
     html,
@@ -141,7 +140,7 @@ export const requestResetToken = async (email) => {
 
 export const resetPassword = async (payload) => {
   try {
-    const decoded = jwt.verify(payload.token, env('JWT_SECRET'));
+    const decoded = jwt.verify(payload.token, process.env.JWT_SECRET);
 
     const user = await UsersCollection.findOne({
     email: decoded.email,
