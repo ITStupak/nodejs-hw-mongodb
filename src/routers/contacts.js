@@ -16,6 +16,9 @@ import { isValidId } from '../middlewares/isValidId.js';
 
 import { authenticate } from '../middlewares/authenticate.js';
 
+import { upload } from '../middlewares/multer.js';
+
+
 const router = Router();
 const jsonParser = express.json();
 
@@ -23,8 +26,8 @@ router.use(authenticate);
 
 router.get('/', ctrlWrapper(getContactsController));
 router.get('/:contactId', isValidId, ctrlWrapper(getContactByIdController));
-router.post('/', jsonParser, validateBody(createContactSchema), ctrlWrapper(createContactController));
+router.post('/', jsonParser, upload.single('photo'), validateBody(createContactSchema), ctrlWrapper(createContactController));
 router.delete('/:contactId', isValidId, ctrlWrapper(deleteContactController));
-router.patch('/:contactId', jsonParser, isValidId, validateBody(updateContactSchema), ctrlWrapper(patchContactController));
+router.patch('/:contactId', jsonParser, isValidId, upload.single('photo'), validateBody(updateContactSchema), ctrlWrapper(patchContactController));
 
 export default router;
