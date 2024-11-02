@@ -49,12 +49,45 @@ export const getContactByIdController = async (req, res) => {
 };
 
 export const createContactController = async (req, res) => {
-  const newContact = await createContact({ ...req.body, userId: req.user._id });
+  const photo = req.file;
+  let photoUrl = null;
+
+  if (photo) {
+    photoUrl = await saveFileToUploadDir(photo);
+  }
+
+  const newContact = await createContact({
+    ...req.body,
+    userId: req.user._id,
+    photo: photoUrl,
+  });
 
   res.status(201).json({
     status: 201,
     message: `Successfully created a contact!`,
     data: newContact,
+  });
+};
+
+export const patchContactController = async (req, res) => {
+  const { contactId } = req.params;
+  const photo = req.file;
+  let photoUrl = null;
+
+  if (photo) {
+    photoUrl = await saveFileToUploadDir(photo);
+  }
+
+  const result = await updateContact(contactId, req.user._id, req.body, {photo: photoUrl});
+
+  if (!result) {
+    throw createHttpError(404, 'Contact not found');
+  }
+
+  res.status(200).json({
+    status: 200,
+    message: `Successfully patched a Contact with id ${contactId}!`,
+    data: result,
   });
 };
 
@@ -67,31 +100,4 @@ export const deleteContactController = async (req, res) => {
   }
 
   res.status(204).send();
-};
-
-export const patchContactController = async (req, res) => {
-  const { contactId } = req.params;
-  const photo = req.file;
-
-  let photoUrl;
-
-  if (photo) {
-    photoUrl = await saveFileToUploadDir(photo);
-  }
-
-  const result = await updateContact(contactId, {
-    ...req.body,
-    //req.user._id,
-    photo: photoUrl,
-  });
-
-  if (!result) {
-    throw createHttpError(404, 'Contact not found');
-  }
-
-  res.status(200).json({
-    status: 200,
-    message: `Successfully patched a Contact with id ${contactId}!`,
-    data: result,
-  });
 };

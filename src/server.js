@@ -8,12 +8,14 @@ import {notFoundHandler} from './middlewares/notFoundHandler.js';
 import cookieParser from 'cookie-parser';
 import { UPLOAD_DIR } from './constants/index.js';
 
-
 const PORT = Number(env('PORT', '8080'));
 
 export function setupServer() {
 
   const app = express();
+
+  app.use('/uploads', express.static(UPLOAD_DIR));
+  
   app.use(cors());
   app.use(cookieParser());
 
@@ -36,6 +38,4 @@ export function setupServer() {
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
   });
-
-  app.use('/uploads', express.static(UPLOAD_DIR));
 };
