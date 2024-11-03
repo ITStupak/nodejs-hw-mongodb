@@ -160,6 +160,9 @@ export const resetPassword = async (payload) => {
       { _id: user._id },
       { password: encryptedPassword },
     );
+    await SessionsCollection.deleteOne(
+      { userId: user._id }
+    );
   } catch (err) {
     if (err.name === 'TokenExpiredError' || err.name === 'JsonWebTokenError') {
       throw createHttpError(401, 'Token is expired or invalid.');
