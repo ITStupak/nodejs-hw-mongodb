@@ -20,7 +20,7 @@ router.post('/refresh', ctrlWrapper(refreshUserSessionController));
 router.post('/send-reset-email', jsonParser, validateBody(sendResetEmailSchema), ctrlWrapper(sendResetEmailController),
 );
 
-router.post('/reset-password', jsonParser, validateBody(resetPasswordSchema), ctrlWrapper(resetPasswordController),
+router.post('/reset-pwd', jsonParser, validateBody(resetPasswordSchema), ctrlWrapper(resetPasswordController),
 );
 
 export default router;
