@@ -1,6 +1,6 @@
 tags:
   - Contacts
-summary: Get list of all contacts
+summary: Get all contacts
 operationId: getAllContacts
 description: 'Get list of all contacts with this endpoint'
 security:
@@ -83,3 +83,5 @@ responses:
     $ref: '../../components/responses/401.yaml'
   '404':
     $ref: '../../components/responses/404.yaml'
+  '500':
+    $ref: '../../components/responses/500.yaml'
