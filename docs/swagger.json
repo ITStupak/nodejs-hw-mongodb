@@ -117,11 +117,6 @@
             "multipart/form-data": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "name",
-                  "phoneNumber",
-                  "contactType"
-                ],
                 "properties": {
                   "name": {
                     "description": "Contact's name",
@@ -209,7 +204,7 @@
         ],
         "summary": "Delete contact",
         "operationId": "delContact",
-        "description": "Delete contact by id from list",
+        "description": "Delete contact from list",
         "security": [
           {
             "bearerAuth": []
@@ -228,7 +223,7 @@
         ],
         "responses": {
           "204": {
-            "description": "Delete contact by id from list"
+            "description": "Сontact was successfully deleted from list"
           },
           "401": {
             "$ref": "#/components/responses/401"
@@ -395,8 +390,7 @@
                 "required": [
                   "name",
                   "phoneNumber",
-                  "contactType",
-                  "userId"
+                  "contactType"
                 ],
                 "properties": {
                   "name": {
